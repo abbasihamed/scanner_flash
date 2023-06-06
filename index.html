@@ -51,7 +51,7 @@
         <div>
           <a class="button" id="startButton">Start</a>
           <a class="button" id="resetButton">Reset</a>
-          <button class="switch">On / Off</button>
+          <a class="button" id="flash">toggle</a>
         </div>
 
         <div>
@@ -168,6 +168,39 @@
         let selectedDeviceId;
         const codeReader = new ZXing.BrowserQRCodeReader();
         console.log("ZXing code reader initialized");
+        var stream = null;
+        var toggleFlashButton = document.getElementById('flash');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ 
+    video: { 
+      facingMode: "environment", // use the back camera
+      torch: false // disable the flash initially
+    } 
+  })
+  .then(function(mediaStream) {
+    // Store the stream object
+    stream = mediaStream;
+
+    // Attach the stream to the video element
+    video.srcObject = stream;
+
+    // Start scanning for barcodes
+  })
+  .catch(function(error) {
+    console.error(error);
+  });
+}
+
+toggleFlashButton.addEventListener('click', function() {
+  // Get the video track from the stream
+  var videoTrack = stream.getVideoTracks()[0];
+
+  // Toggle the flash
+  videoTrack.applyConstraints({
+    advanced: [{torch: !videoTrack.getSettings().torch}]
+  });
+});
 
         codeReader
           .getVideoInputDevices()
@@ -215,12 +248,7 @@
                 document.getElementById("result").textContent = "";
                 console.log("Reset.");
               });
-            document.getElementById("switch").addEventListener("click", () => {
-                console.log("on");
-              track.applyConstraints({
-                advanced: [{ torch: true }],
-              });
-            });
+            
           })
           .catch((err) => {
             console.error(err);
