@@ -7,7 +7,7 @@
 </head>
 <body>
   <video id="video" width="100%" height="100%"></video>
-  <button id="toggle-flash-button">Toggle Flash</button>
+  <button id="toggle-flash-button" onclick="toggleFlash()">Toggle Flash</button>
 
   <script src="https://unpkg.com/@zxing/library@latest"></script>
   <script>
@@ -50,18 +50,18 @@
     }
 
     // Add a click event listener to the toggle flash button
-    toggleFlashButton.addEventListener('click', function() {
+    function toggleFlash() {
       // Get the video track from the stream
       var videoTrack = stream.getVideoTracks()[0];
 
-      toggole =!toggole;
-      console.log(toggole);
-
       // Toggle the flash
       videoTrack.applyConstraints({
-        advanced: [{torch: toggole}]
+        advanced: [{torch: !videoTrack.getSettings().torch}]
       });
-    });
+
+      // Update the button text
+      toggleFlashButton.textContent = videoTrack.getSettings().torch ? "Turn Off Flash" : "Turn On Flash";
+    }
   </script>
 </body>
 </html>
