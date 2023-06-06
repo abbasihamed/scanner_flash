@@ -215,16 +215,16 @@
                 document.getElementById("result").textContent = "";
                 console.log("Reset.");
               });
+            document.getElementById("switch").addEventListener("click", () => {
+                console.log("on");
+              track.applyConstraints({
+                advanced: [{ torch: true }],
+              });
+            });
           })
           .catch((err) => {
             console.error(err);
           });
-        const btn = document.querySelector(".switch");
-        btn.addEventListener("click", function () {
-          track.applyConstraints({
-            advanced: [{ torch: true }],
-          });
-        });
       });
     </script>
   </body>
