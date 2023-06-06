@@ -22,6 +22,7 @@
 
     // Get a reference to the stream object
     var stream = null;
+    var toggole = false
 
     // Check if the device has a camera and if it supports flash
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -53,9 +54,12 @@
       // Get the video track from the stream
       var videoTrack = stream.getVideoTracks()[0];
 
+      toggole =!toggole;
+      console.log(toggole);
+
       // Toggle the flash
       videoTrack.applyConstraints({
-        advanced: [{torch: !videoTrack.getSettings().torch}]
+        advanced: [{torch: toggole}]
       });
     });
   </script>
